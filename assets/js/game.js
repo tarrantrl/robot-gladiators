@@ -1,25 +1,57 @@
 // Use camel case for variables, JS can't do hyphens
-var playerName = window.prompt("What is your robot's name?");
-console.log(playerName);
-
-// create a function called "fight"
-function fight() {
-    window.alert("The fight has begun!");
-}
-// fight();
 
 // The game will prompt the user to name their robot.
+var playerName = window.prompt("What is your robot's name?");
 
 // The player's robot will be initialized with the following properties:
     // 100 health points
     // 10 attack points
     // 10 money points
+var playerHealth = 100;
+var playerAttack = 10;
+console.log(playerName, playerAttack, playerHealth);
+
 
 // The player's opponent, Roborto, will be initialized with the following properties:
     // 50 health points
     // 12 attack points
+var enemyName = "Roborto";
+var enemyHealth = 50;
+var enemyAttack = 12;
+console.log(enemyName, enemyAttack, enemyHealth);
 
-// The game will display "Welcome to Robot Gladiators!"
+// create a function called "fight"
+var fight = function() {
+    // The game will display "Welcome to Robot Gladiators!"
+    //Alert users that they're starting the round.
+    window.alert("Welcome to Robot Gladiators!");
+
+    // Subtract the value of playerAttack from the value of enemyHealth, and use that result to update the value in the enemyHealth variable.
+    enemyHealth = enemyHealth - playerAttack;
+
+    // Log a resulting message to the console to confirm that it worked.
+    console.log(
+        playerName + " attacked " + enemyName + ". " + enemyName + " now has " + enemyHealth + " health remaining."
+    );
+
+    // Subtract the value of enemyAttack from the value of playerHealth, and use that result to update the value in the playerHealth variable.
+    playerHealth = playerHealth - enemyAttack;
+
+    // Log a resulting message to the console to confirm that it worked.
+    console.log(
+        enemyName + " attacked " + playerName + ". " + playerName + " now has " + playerHealth + " health remaining."
+      );
+};
+
+fight();
+
+
+
+
+
+
+
+
 
 // The game will prompt the user to either fight the round or skip it.
 
