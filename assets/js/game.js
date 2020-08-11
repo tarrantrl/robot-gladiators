@@ -10,19 +10,19 @@ var playerName = window.prompt("What is your robot's name?");
 var playerHealth = 100;
 var playerAttack = 10;
 var playerMoney = 10;
-console.log(playerName, playerAttack, playerHealth, playerMoney);
+// console.log(playerName, playerAttack, playerHealth, playerMoney);
 
 
-// The player's opponent, Roborto, will be initialized with the following properties:
+// Create string of enemy robot names 
+var enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
+    
     // 50 health points
     // 12 attack points
-var enemyName = "Roborto";
 var enemyHealth = 50;
 var enemyAttack = 12;
-console.log(enemyName, enemyAttack, enemyHealth);
 
 // create a function called "fight"
-var fight = function() {
+var fight = function(enemyName) {
     // The game will display "Welcome to Robot Gladiators!"
     //Alert users that they're starting the round.
     window.alert("Welcome to Robot Gladiators!");
@@ -96,7 +96,16 @@ var fight = function() {
     }   
 };
 
-fight();
+// Iterate through the enemyNames array and call fight each time
+for(var i = 0; i < enemyNames.length; i++){
+    fight(enemyNames[i])
+}
+
+// Game States
+// WIN - player robot has defeated all enemy robots
+//  *Fight all enemy robots
+//  * Defeat each enemy robot
+// LOSE - player robot's health is zero or less
 
 // The game will prompt the user to either fight the round or skip it.
 
