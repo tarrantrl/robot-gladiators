@@ -92,23 +92,69 @@ var fight = function(enemyName) {
     }   
 };
 
-// Iterate through the enemyNames array and call fight each time
-for(var i = 0; i < enemyNames.length; i++){
-    if (playerHealth > 0){
-        //Alert users that they're starting the round.
-        window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
-    } else {
-        window.alert("You have lost your robit in battle! Game Over!");
-        break;
+// function to start a new game
+var startGame = function(){
+    //reset player stats
+    playerHealth = 100;
+    playerAttack = 10;
+    playerMoney = 10;
+    // Iterate through the enemyNames array and call fight each time
+    for(var i = 0; i < enemyNames.length; i++){
+        if (playerHealth > 0){
+            //Alert users that they're starting the round.
+            window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
+            // pick an enemy based on the index of enemyNames
+            var pickedEnemyName = enemyNames[i];
+            // reset enemyHealth before starting new fight
+            enemyHealth = 50;
+            // debugger;
+            // pass pickedEnemyName to fight function
+            fight(pickedEnemyName);
+        } else {
+            window.alert("You have lost your robot in battle! Game Over!");
+            break;
+        }
     }
-    // pick an enemy based on the index of enemyNames
-    var pickedEnemyName = enemyNames[i];
-    // reset enemyHealth before starting new fight
-    enemyHealth = 50;
-    // debugger;
-    // pass pickedEnemyName to fight function
-    fight(pickedEnemyName);
+    //play again
+    endGame();
 }
+
+var endGame = function() {
+    //if player is alive, they win
+    if (playerHealth > 0){
+        window.alert("Great job, you've survived the game! You now have a score of " + playerMoney + ".");
+    }else {
+        window.alert("You've lost your robot in battle.");
+    }
+    //ask the player if they want to play again
+    var playAgainConfirm = window.confirm("Would you like to play again?");
+    if (playAgainConfirm){
+        //restart game
+        startGame();
+    }else{
+        window.alert("Thank you for playing Robot Gladiators! Come back soon!");
+    }
+}
+
+//start game when the page loads
+startGame();
+
+//wrap game logic in startGame() function
+//at end of game, call endGame() function which displays score and asks to play again, if yes call startGame()
+//at the end of the game after for loop
+//window alert player's score
+//window confirm if they want to play again
+//if true, call the fight function again
+
+//after player defeats or skips robot
+//window confirm if they want to visit the shop
+//if no, continue as normal
+//if yes, call shop() func. 
+//window prompt. Options to refill, upgrade, or leave
+//if refill, subtract money and increase health
+//if upgrade, subtract money and increase attack
+//if leave, exit function
+//if invalid info, call shop()
 
 // Game States
 // WIN - player robot has defeated all enemy robots
