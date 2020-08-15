@@ -40,7 +40,7 @@ var fight = function(enemyName) {
             if (confirmSkip) {
                 window.alert(playerName + " has decided to skip this fight. Goodbye!");
                 // subtract money from playerMoney for skipping
-                playerMoney -= 10;
+                playerMoney = Math.max(0, playerMoney - 10);
                 console.log("playerMoney", playerMoney);
                 break;
             }
@@ -50,7 +50,10 @@ var fight = function(enemyName) {
         }
         // if the player does not specifically request skip, then default to fight
         // Subtract the value of playerAttack from the value of enemyHealth, and use that result to update the value in the enemyHealth variable.
-        enemyHealth = enemyHealth - playerAttack;
+        //use Math.max to not let the enemy health go below 0
+        //generate random damage based on player's attack power
+        var damage = randomNumber(playerAttack - 3, playerAttack);
+        enemyHealth = Math.max(0, enemyHealth - damage);
 
         // Log a resulting message to the console to confirm that it worked.
         console.log(
@@ -69,7 +72,9 @@ var fight = function(enemyName) {
         }
 
         // Subtract the value of enemyAttack from the value of playerHealth, and use that result to update the value in the playerHealth variable.
-        playerHealth = playerHealth - enemyAttack;
+        var playerDamage = randomNumber(enemyAttack - 3, enemyAttack);
+        //console.log(playerDamage);
+        playerHealth = Math.max(0, playerHealth - playerDamage);
 
         // Log a resulting message to the console to confirm that it worked.
         console.log(
@@ -105,8 +110,10 @@ var startGame = function(){
             window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
             // pick an enemy based on the index of enemyNames
             var pickedEnemyName = enemyNames[i];
-            // reset enemyHealth before starting new fight
-            enemyHealth = 50;
+            // generate a random number between 40 and 60 for enemyHealth
+            enemyHealth = randomNumber(40, 60);
+            enemyAttack = randomNumber(10, 14);
+            // console.log(enemyHealth, enemyAttack);
             // debugger;
             // pass pickedEnemyName to fight function
             fight(pickedEnemyName);
@@ -185,8 +192,19 @@ var shop = function() {
     }
 }
 
+//function to generate random value between two values
+var randomNumber = function (min, max){
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
+    return value;
+}
+
 //start game when the page loads
 startGame();
+
+//add randomnes
+//enemy health between 40 and 60
+//enemy attack between 10 and 14
+//each enemy attack random with attack value as upper limit
 
 //wrap game logic in startGame() function
 //at end of game, call endGame() function which displays score and asks to play again, if yes call startGame()
