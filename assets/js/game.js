@@ -6,8 +6,7 @@ var fightOrSkip = function() {
     var promptFight = window.prompt ("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
 
     //recursive call until a valid answer is provided
-    //if (promptFight === "" || promptFight === null){
-    // can use falsy values check here instead
+    // can use falsy values check here instead of specifying === "" or === null
     if (!promptFight){
         window.alert("You need to provide a valid answer! Please choose 'FIGHT' or 'SKIP.'");
         return fightOrSkip();
@@ -39,7 +38,7 @@ var fight = function(enemy) {
     if (Math.random() > 0.5){
         isPlayerTurn = false;
     }
-    console.log("turn " + isPlayerTurn);
+    //console.log("turn " + isPlayerTurn);
 
     // repeat and execute as long as the enemy robot is alive and the player is alive
     while(enemy.health > 0 && playerInfo.health > 0) {
@@ -104,6 +103,7 @@ var startGame = function(){
     playerInfo.reset();
     // Iterate through the enemyInfo array and call fight each time
     for(var i = 0; i < enemyInfo.length; i++){
+        // check if player has remaining health
         if (playerInfo.health > 0){
             //Alert users that they're starting the round.
             window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
@@ -112,11 +112,12 @@ var startGame = function(){
             var pickedEnemyObj = enemyInfo[i];
             // generate a random number between 40 and 60 for enemy.health
             pickedEnemyObj.health = randomNumber(40, 60);
-            //enemy.attack = randomNumber(10, 14);
             // console.log(enemy.health, enemy.attack);
             // debugger;
+
             // pass pickedEnemyObj to fight function
             fight(pickedEnemyObj);
+
             // after the fight, if we are not on the last enemy in the array and the player is alive 
             if (playerInfo.health > 0 && i < enemyInfo.length - 1){
                 // ask if user wants to use the store before the next round
@@ -127,19 +128,48 @@ var startGame = function(){
                     shop();
                 }  
             }
+        // else if player has no health left
         } else {
             window.alert("You have lost your robot in battle! Game Over!");
             break;
         }
     }
-    //play again
+    // call endGame to play again or stop playing
     endGame();
 }
 
+// write function to end the game
 var endGame = function() {
     //if player is alive, they win
     if (playerInfo.health > 0){
+        // player score is equal to their money
         window.alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + ".");
+        // when the game has ended and we survived
+        // retrieve current high score from local storage
+        var highScore = localStorage.getItem("highScore");
+        // if null, set to 0
+        // if (highScore === null) {
+        //     highScore = 0;
+        // }
+        // can use truthy to set highScore to 0 if null shortcut
+        highScore = highScore || 0;
+        //convert highScore to number since localStorage is all strings
+        highScore = parseInt(highScore);
+        // compare player score to current high score
+        // if player money is higher than current high score
+        if (highScore < playerInfo.money){
+            // set new high score in localStorage
+            localStorage.setItem("highScore", playerInfo.money);
+            // set player robot's name in localStorage
+            localStorage.setItem("name", playerInfo.name);
+            // alert player that they beat the high score
+            window.alert(playerInfo.name + " now has the high score of " + playerInfo.money + "!");
+        // else if player score higher
+        } else {
+            // alert that player did not beat high score
+            window.alert(playerInfo.name + " did not beat the high score of " + highScore + ". Maybe next time!");
+        }
+    // else if player has not health left         
     }else {
         window.alert("You've lost your robot in battle.");
     }
@@ -153,20 +183,23 @@ var endGame = function() {
     }
 }
 
+// write function for shop interactions
 var shop = function() {
     //console.log("entered shop");
     // ask player what they'd like to do
     var shopOptionPrompt = window.prompt("Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter 1 for REFILL, 2 for UPGRADE, or 3  for LEAVE to make a choice.");
-    //shopOptionPrompt = shopOptionPrompt.toLowerCase();
     // use switch to decide what to do with the shop prompt
     shopOptionPrompt = parseInt(shopOptionPrompt);
     switch (shopOptionPrompt){
+        // 1 for refill
         case 1:
             playerInfo.refillHealth();
             break;
+        // 2 for upgrade
         case 2:
             playerInfo.upgradeAttack();
             break;
+        // 3 for leave
         case 3:
             window.alert("Leaving the store");
             break;
@@ -195,7 +228,7 @@ var getPlayerName = function (){
     return name;
 }
 
-//replace player info with an object
+// player info object
 var playerInfo = {
     name: getPlayerName(),
     health: 100,
@@ -226,7 +259,7 @@ var playerInfo = {
     }
 };
 
-//replace enemy info with an array of objects
+// enemy info array of objects, with random attack values between 10 and 14
 var enemyInfo = [
     {
         name: "Roborto",
@@ -244,45 +277,3 @@ var enemyInfo = [
 
 //start game when the page loads
 startGame();
-
-//add randomnes
-//enemy health between 40 and 60
-//enemy attack between 10 and 14
-//each enemy attack random with attack value as upper limit
-
-//wrap game logic in startGame() function
-//at end of game, call endGame() function which displays score and asks to play again, if yes call startGame()
-//at the end of the game after for loop
-//window alert player's score
-//window confirm if they want to play again
-//if true, call the fight function again
-
-//after player defeats or skips robot
-//window confirm if they want to visit the shop
-//if no, continue as normal
-//if yes, call shop() func. 
-//window prompt. Options to refill, upgrade, or leave
-//if refill, subtract money and increase health
-//if upgrade, subtract money and increase attack
-//if leave, exit function
-//if invalid info, call shop()
-
-// Game States
-// WIN - player robot has defeated all enemy robots
-//  *Fight all enemy robots
-//  * Defeat each enemy robot
-// LOSE - player robot's health is zero or less
-
-// The game will prompt the user to either fight the round or skip it.
-
-// If the player chooses to skip:
-    // A penalty of 10 money points will be deducted from the player's robot.
-    // The game will end.
-
-// If the player chooses to fight:
-    // The player's robot will attack Roborto, and the player robot's attack points will be deducted from Roborto's health points.
-    // The game will display Roborto's remaining health points.
-    // Roborto will attack the player's robot, and Roberto's attack points will be deducted from the player's robot's health points.
-    // The game will display the player robot's remaining health points.
-
-// The game will end.
